@@ -4,7 +4,8 @@
 #include <string>
 #include <memory>
 #include <algorithm>
-
+#include <thread>
+#include <chrono>
 
 using namespace std;
 
@@ -327,6 +328,24 @@ int main()
 
 
 
+
+    // ----------------
+    cout << "Multi-threading" << endl;
+    // ----------------
+    {
+        auto sleep_foo = [](int delay) {
+            cout << "Thread id : " << this_thread::get_id() << endl;
+            this_thread::sleep_for(chrono::milliseconds(delay));
+        };
+
+        cout << "Start thread : ";
+        auto t0 = chrono::high_resolution_clock::now();
+        thread t(sleep_foo, 2000);
+        t.join();
+        auto elapsed = chrono::high_resolution_clock::now() - t0;
+        cout << "END : " << chrono::duration<float>(elapsed).count() << endl;
+
+    }
 
     return 0;
 }
